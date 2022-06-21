@@ -6,7 +6,6 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 app.use(express.json());
-
 app.use(
     cors({
         credentials: true,
@@ -14,10 +13,9 @@ app.use(
     })
 );
 app.use(cookieParser());
+app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-    res.json({ msg: "Init" });
-});
+app.use("/api", require("./routes/userRouter"));
 
 const port = process.env.PORT || 5000;
 
