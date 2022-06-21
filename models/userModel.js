@@ -24,8 +24,16 @@ const userSchema = new mongoose.Schema(
             type: String,
             default: "http://localhost:5000/defaultAvatar.jpg",
         },
+        role: { type: Number, default: 0 },
+        // history: [
+        //     {
+        //         exam: { type: mongoose.Types.ObjectId, ref: "question" },
+        //         examExpire: { type: Date, required: true },
+        //         score: { type: Number, required: true, default: 0 },
+        //     },
+        // ],
     },
     { timestamps: true }
 );
 
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model("User", userSchema);

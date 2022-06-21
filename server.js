@@ -16,6 +16,8 @@ app.use(cookieParser());
 app.use(express.static("public"));
 
 app.use("/api", require("./routes/userRouter"));
+app.use("/api", require("./routes/examRouter"));
+app.use("/api", require("./routes/questionRouter"));
 
 const port = process.env.PORT || 5000;
 
