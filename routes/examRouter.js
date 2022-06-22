@@ -12,5 +12,6 @@ router.delete(
     examCtrl.removeQuestion
 );
 router.post("/exam/submitAnswer/:id", userMdw.isLogin, examCtrl.submitAnswer);
+router.get("/exam/startExam/:id", userMdw.isLogin, examCtrl.startExam);
 
 module.exports = router;

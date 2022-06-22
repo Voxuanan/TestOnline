@@ -1,5 +1,6 @@
 const Exams = require("../models/examModel");
 const Questions = require("../models/questionModel");
+const { deepCompare } = require("../utils/compareObjectUtils");
 
 const examCtrl = {
     createExam: async (req, res) => {
@@ -98,8 +99,40 @@ const examCtrl = {
             });
             const score = Math.round((rightAnswers / exam.listOfQuestion.length) * 10 * 100) / 100;
 
-            //TODO: Khi thêm trường cho model user -> cập nhật trường đó
+            const item = req.user.history.find(
+                (item) => item.isSubmit == false && deepCompare(item.exam._id, exam._id)
+            );
+            if (item) {
+                item.score = score;
+                item.isSubmit = true;
+                req.user.save();
+            } else {
+                res.json({ msg: "This user has not started this exam!", score });
+            }
+
             res.json({ msg: "Submit success!", score });
+        } catch (error) {
+            return res.status(500).json({ msg: error.message });
+        }
+    },
+    startExam: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
+            const isContain = req.user.history.some(
+                (item) => item.isSubmit == false && deepCompare(item.exam._id, exam._id)
+            );
+            if (isContain)
+                return res.json({ msg: "This user has not completed the previous exam!" });
+            const historyItem = {
+                exam: exam._id,
+                startTime: Date.now(),
+                score: 0,
+                isSubmit: false,
+            };
+            req.user.history.push(historyItem);
+            req.user.save();
+            res.json({ msg: "Start exam!" });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }

@@ -25,13 +25,14 @@ const userSchema = new mongoose.Schema(
             default: "http://localhost:5000/defaultAvatar.jpg",
         },
         role: { type: Number, default: 0 },
-        // history: [
-        //     {
-        //         exam: { type: mongoose.Types.ObjectId, ref: "question" },
-        //         examExpire: { type: Date, required: true },
-        //         score: { type: Number, required: true, default: 0 },
-        //     },
-        // ],
+        history: [
+            {
+                exam: { type: mongoose.Types.ObjectId, ref: "exam" },
+                startTime: { type: Date, required: true },
+                score: { type: Number, required: true, default: 0 },
+                isSubmit: { type: Boolean, required: true, default: false },
+            },
+        ],
     },
     { timestamps: true }
 );
