@@ -8,6 +8,7 @@ const questionSchema = new mongoose.Schema(
         answerC: { type: String, required: true },
         answerD: { type: String, required: true },
         correctAnswer: { type: String, required: true },
+        lession: { type: mongoose.Types.ObjectId, ref: "lession" },
     },
     { timestamps: true }
 );

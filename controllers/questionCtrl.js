@@ -23,10 +23,26 @@ const questionCtrl = {
         try {
             const { id } = req.params;
             let { isShuffle = false, questionCount = 0 } = req.query;
+            const { listOfLessions } = req.body;
             const exam = await Exams.findOne({ _id: id }).populate(
                 "listOfQuestion",
                 "-correctAnswer"
             );
+            if (!exam) return res.status(400).json({ msg: "Exam id not exist" });
+
+            if (listOfLessions.length != 0) {
+                const arrTemp = [];
+                exam.listOfQuestion.forEach((question) => {
+                    let isOk = false;
+                    if (question.lession) {
+                        listOfLessions.forEach((lession) => {
+                            isOk = isOk || question.lession.toString() == lession;
+                        });
+                    }
+                    if (isOk) arrTemp.push(question);
+                });
+                exam.listOfQuestion = arrTemp;
+            }
             if (questionCount > exam.listOfQuestion.length)
                 questionCount = exam.listOfQuestion.length;
             if (questionCount < 0) questionCount = 0;

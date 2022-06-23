@@ -18,6 +18,7 @@ app.use(express.static("public"));
 app.use("/api", require("./routes/userRouter"));
 app.use("/api", require("./routes/examRouter"));
 app.use("/api", require("./routes/questionRouter"));
+app.use("/api", require("./routes/contentAndLessionRouter"));
 
 const port = process.env.PORT || 5000;
 

@@ -48,11 +48,12 @@ const examCtrl = {
             const { id } = req.params;
             const exam = await Exams.findOne({ _id: id });
             if (!exam) {
-                res.status(400).json({ msg: "Exam Id is incorrect!" });
+                return res.status(400).json({ msg: "Exam Id is incorrect!" });
             }
-            const { answerA, answerB, answerC, answerD, correctAnswer, question } = req.body;
+            const { answerA, answerB, answerC, answerD, correctAnswer, question, lession } =
+                req.body;
             if (!answerA || !answerB || !answerC || !answerD || !correctAnswer || !question) {
-                res.status(400).json({ msg: "All fields are required!" });
+                return res.status(400).json({ msg: "All fields are required!" });
             }
             const newQuestion = new Questions({
                 answerA,
@@ -61,6 +62,7 @@ const examCtrl = {
                 answerD,
                 correctAnswer,
                 question,
+                lession,
             });
             await newQuestion.save();
             const newExam = await Exams.findOneAndUpdate(
