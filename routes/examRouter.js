@@ -13,5 +13,7 @@ router.delete(
 );
 router.post("/exam/submitAnswer/:id", userMdw.isLogin, examCtrl.submitAnswer);
 router.get("/exam/startExam/:id", userMdw.isLogin, examCtrl.startExam);
+router.post("/exam/updateExam/:id", userMdw.isLogin, userMdw.isAdmin, examCtrl.updateExam);
+router.delete("/exam/deleteExam/:id", userMdw.isLogin, userMdw.isAdmin, examCtrl.deleteExam);
 
 module.exports = router;

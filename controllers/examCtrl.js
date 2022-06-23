@@ -28,8 +28,8 @@ const examCtrl = {
     },
     getPaginationExams: async (req, res) => {
         try {
-            const { page = 0, pageSize = 20 } = req.query;
-            const listOfExam = await Exams.find()
+            const { page = 0, pageSize = 20, grade = 12, subject = "Toán" } = req.query;
+            const listOfExam = await Exams.find({ grade, subject })
                 .limit(pageSize)
                 .skip((page - 1) * pageSize);
             res.json({ msg: "List of exam", listOfExam });
@@ -133,6 +133,29 @@ const examCtrl = {
             req.user.history.push(historyItem);
             req.user.save();
             res.json({ msg: "Start exam!" });
+        } catch (error) {
+            return res.status(500).json({ msg: error.message });
+        }
+    },
+    updateExam: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { name, grade, subject, time } = req.body;
+            const exam = await Exams.findByIdAndUpdate(
+                { _id: id },
+                { name, grade, subject, time },
+                { new: true }
+            ).populate("listOfQuestion");
+            res.json({ msg: "Update exam!", exam });
+        } catch (error) {
+            return res.status(500).json({ msg: error.message });
+        }
+    },
+    deleteExam: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const exam = await Exams.findByIdAndRemove(id);
+            res.json({ msg: "Delete exam!", exam });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }

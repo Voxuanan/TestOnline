@@ -1,11 +1,16 @@
 const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { validateEmail, validatePhone } = require("../utils/regexUtils");
 
 const userCtrl = {
     register: async (req, res) => {
         try {
             const { fullname, email, mobile, password, grade, birthday } = req.body;
+            if (mobile && !validatePhone(mobile))
+                return res.status(400).json({ msg: "This mobile format is incorrect." });
+            if (email && !validateEmail(email))
+                return res.status(400).json({ msg: "This email format is incorrect." });
             const user_mobile = await Users.findOne({ mobile: mobile });
             if (user_mobile) return res.status(400).json({ msg: "This mobile already exist." });
             const user_email = await Users.findOne({ email: email });
@@ -41,9 +46,11 @@ const userCtrl = {
     },
     login: async (req, res) => {
         try {
-            const { email, mobile, password } = req.body;
-            let user = await Users.findOne({ email });
-            if (!user) user = await Users.findOne({ mobile });
+            const { password, username } = req.body;
+            if (!validateEmail(username) && !validatePhone(username))
+                return res.status(400).json({ msg: "This username format is incorrect." });
+            let user = await Users.findOne({ email: username });
+            if (!user) user = await Users.findOne({ mobile: username });
             if (!user) {
                 return res.status(400).json({ msg: "This email or mobile does not exist." });
             }
