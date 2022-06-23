@@ -8,6 +8,7 @@ const examSchema = new mongoose.Schema(
         listOfQuestion: [{ type: mongoose.Types.ObjectId, ref: "question" }],
         time: { type: Number, required: true, default: 15 },
         isTHPTQG: { type: Boolean, required: true, default: false },
+        count: { type: Number, required: true, default: 0 },
     },
     { timestamps: true }
 );

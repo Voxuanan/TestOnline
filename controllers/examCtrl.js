@@ -9,7 +9,7 @@ const examCtrl = {
             if (!name || !subject || !listOfQuestion)
                 return res.status(400).json({ msg: "Please fill all the required fields!" });
             if (isTHPTQG) grade = 12;
-            const newExam = new Exams({ name, grade, subject, time, isTHPTQG });
+            const newExam = new Exams({ name, grade, subject, time, isTHPTQG, count: 0 });
             await newExam.save();
             listOfQuestion.forEach(async (question) => {
                 const newQuestion = new Questions({ ...question });
@@ -101,7 +101,8 @@ const examCtrl = {
             if (!exam) return res.status(400).json({ msg: "Exam is not exist" });
             let rightAnswers = 0;
             exam.listOfQuestion.forEach((answer, index) => {
-                if (answer.correctAnswer === answers[index].answer) {
+                const foundAnswer = answers.find((item) => answer._id == item.questionId);
+                if (answer.correctAnswer === foundAnswer.answer) {
                     rightAnswers++;
                 }
             });
@@ -142,6 +143,7 @@ const examCtrl = {
             };
             req.user.history.push(historyItem);
             req.user.save();
+            await Exams.findByIdAndUpdate({ _id: id }, { $inc: { count: 1 } });
             res.json({ msg: "Start exam!" });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
