@@ -5,10 +5,11 @@ const { deepCompare } = require("../utils/compareObjectUtils");
 const examCtrl = {
     createExam: async (req, res) => {
         try {
-            const { name, grade, subject, listOfQuestion, time } = req.body;
-            if (!name || !grade || !subject || !listOfQuestion)
+            let { name, grade = 12, subject, listOfQuestion, time, isTHPTQG = false } = req.body;
+            if (!name || !subject || !listOfQuestion)
                 return res.status(400).json({ msg: "Please fill all the required fields!" });
-            const newExam = new Exams({ name, grade, subject, time });
+            if (isTHPTQG) grade = 12;
+            const newExam = new Exams({ name, grade, subject, time, isTHPTQG });
             await newExam.save();
             listOfQuestion.forEach(async (question) => {
                 const newQuestion = new Questions({ ...question });
@@ -28,8 +29,14 @@ const examCtrl = {
     },
     getPaginationExams: async (req, res) => {
         try {
-            const { page = 0, pageSize = 20, grade = 12, subject = "Toán" } = req.query;
-            const listOfExam = await Exams.find({ grade, subject })
+            const {
+                page = 0,
+                pageSize = 20,
+                grade = 12,
+                subject = "Toán",
+                isTHPTQG = false,
+            } = req.query;
+            const listOfExam = await Exams.find({ grade, subject, isTHPTQG })
                 .limit(pageSize)
                 .skip((page - 1) * pageSize);
             res.json({ msg: "List of exam", listOfExam });
