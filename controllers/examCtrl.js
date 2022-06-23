@@ -1,6 +1,5 @@
 const Exams = require("../models/examModel");
 const Questions = require("../models/questionModel");
-const { deepCompare } = require("../utils/compareObjectUtils");
 
 const examCtrl = {
     createExam: async (req, res) => {
@@ -109,7 +108,7 @@ const examCtrl = {
             let score = Math.round((rightAnswers / exam.listOfQuestion.length) * 10 * 100) / 100;
             if (exam.listOfQuestion.length == 0) score = 10;
             const item = req.user.history.find(
-                (item) => item.isSubmit == false && deepCompare(item.exam._id, exam._id)
+                (item) => item.isSubmit == false && item.exam._id.toString() == exam._id.toString()
             );
             if (item) {
                 item.score = score;
@@ -129,7 +128,9 @@ const examCtrl = {
         try {
             const { id } = req.params;
             const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
-            const isContain = req.user.history.some((item) => deepCompare(item.exam._id, exam._id));
+            const isContain = req.user.history.some(
+                (item) => item.exam._id.toString() == exam._id.toString()
+            );
             if (isContain) return res.json({ msg: "This user already took this exam!" });
             const historyItem = {
                 exam: exam._id,
@@ -172,7 +173,8 @@ const examCtrl = {
     historyDetailedExam: async (req, res) => {
         try {
             let historyDetail = req.user.history.find(
-                (item) => item.isSubmit == true && deepCompare(item.exam._id, req.exam._id)
+                (item) => item.isSubmit == true && item.exam._id.toString(),
+                req.exam._id.toString()
             );
             let questionAndAnswers = historyDetail.exam.listOfQuestion.reduce((total, item) => {
                 const answer = historyDetail.answers.find(

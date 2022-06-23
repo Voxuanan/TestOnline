@@ -1,5 +1,4 @@
 const Exams = require("../models/examModel");
-const { deepCompare } = require("../utils/compareObjectUtils");
 
 const examMiddleware = {
     isFinished: async (req, res, next) => {
@@ -7,11 +6,13 @@ const examMiddleware = {
             const { id } = req.params;
             const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
             req.exam = exam;
-            const isContain = req.user.history.some((item) => deepCompare(item.exam._id, exam._id));
+            const isContain = req.user.history.some(
+                (item) => item.exam._id.toString() === exam._id.toString()
+            );
             if (!isContain)
                 return res.status(400).json({ msg: "This user has not took the exam yet!" });
             const isFinish = req.user.history.some(
-                (item) => item.isSubmit == true && deepCompare(item.exam._id, exam._id)
+                (item) => item.isSubmit == true && item.exam._id.toString() === exam._id.toString()
             );
             if (!isFinish)
                 return res.status(400).json({ msg: "This user has not finished the exam yet!" });
