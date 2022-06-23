@@ -129,11 +129,8 @@ const examCtrl = {
         try {
             const { id } = req.params;
             const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
-            const isContain = req.user.history.some(
-                (item) => item.isSubmit == false && deepCompare(item.exam._id, exam._id)
-            );
-            if (isContain)
-                return res.json({ msg: "This user has not completed the previous exam!" });
+            const isContain = req.user.history.some((item) => deepCompare(item.exam._id, exam._id));
+            if (isContain) return res.json({ msg: "This user already took this exam!" });
             const historyItem = {
                 exam: exam._id,
                 startTime: Date.now(),
@@ -168,6 +165,39 @@ const examCtrl = {
             const { id } = req.params;
             const exam = await Exams.findByIdAndRemove(id);
             res.json({ msg: "Delete exam!", exam });
+        } catch (error) {
+            return res.status(500).json({ msg: error.message });
+        }
+    },
+    historyDetailedExam: async (req, res) => {
+        try {
+            let historyDetail = req.user.history.find(
+                (item) => item.isSubmit == true && deepCompare(item.exam._id, req.exam._id)
+            );
+            let questionAndAnswers = historyDetail.exam.listOfQuestion.reduce((total, item) => {
+                const answer = historyDetail.answers.find(
+                    (itemAnswer) => itemAnswer.questionId.toString() == item._id.toString()
+                );
+                let questionAndAnswer = { ...item._doc, userAnswer: answer.answer };
+
+                return [...total, questionAndAnswer];
+            }, []);
+            res.json({
+                questionAndAnswers,
+                startTime: historyDetail.startTime,
+                score: historyDetail.score,
+                isSubmit: historyDetail.isSubmit,
+                exam: {
+                    name: historyDetail.exam.name,
+                    grade: historyDetail.exam.grade,
+                    subject: historyDetail.exam.subject,
+                    time: historyDetail.exam.time,
+                    isTHPTQG: historyDetail.exam.isTHPTQG,
+                    count: historyDetail.exam.count,
+                    createdAt: historyDetail.exam.createdAt,
+                    updateAt: historyDetail.exam.updateAt,
+                },
+            });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }

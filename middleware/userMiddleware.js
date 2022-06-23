@@ -13,7 +13,12 @@ const userMiddleware = {
             if (!decode) {
                 return res.status(400).json({ msg: "Invalid authorization" });
             }
-            const user = await Users.findOne({ _id: decode.id }).populate("history.exam");
+            const user = await Users.findOne({ _id: decode.id }).populate({
+                path: "history.exam",
+                populate: {
+                    path: "listOfQuestion",
+                },
+            });
             req.user = user;
             next();
         } catch (error) {
