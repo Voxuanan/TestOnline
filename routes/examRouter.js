@@ -3,7 +3,7 @@ const examCtrl = require("../controllers/examCtrl");
 const userMdw = require("../middleware/userMiddleware");
 
 router.post("/exam/createExam", userMdw.isLogin, userMdw.isAdmin, examCtrl.createExam);
-router.get("/exam/getPaginationExams", userMdw.isLogin, examCtrl.getPaginationExams);
+router.get("/exam/getPaginationExams", examCtrl.getPaginationExams);
 router.patch("/exam/addQuestion/:id", userMdw.isLogin, userMdw.isAdmin, examCtrl.addQuestion);
 router.delete(
     "/exam/removeQuestion/:id",

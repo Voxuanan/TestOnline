@@ -31,6 +31,12 @@ const userSchema = new mongoose.Schema(
                 startTime: { type: Date, required: true },
                 score: { type: Number, required: true, default: 0 },
                 isSubmit: { type: Boolean, required: true, default: false },
+                answers: [
+                    {
+                        questionId: { type: mongoose.Types.ObjectId, ref: "question" },
+                        answer: { type: String, required: true },
+                    },
+                ],
             },
         ],
     },

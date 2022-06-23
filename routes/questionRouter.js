@@ -3,7 +3,7 @@ const questionCtrl = require("../controllers/questionCtrl");
 const userMdw = require("../middleware/userMiddleware");
 
 // Dùng cho học sinh (không có đáp án)
-router.get("/question/getQuesionsByExamId/:id", userMdw.isLogin, questionCtrl.getQuesionsByExamId);
+router.get("/question/getQuesionsByExamId/:id", questionCtrl.getQuesionsByExamId);
 router.get(
     "/question/admin/getQuesionsByExamId/:id",
     userMdw.isLogin,

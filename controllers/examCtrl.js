@@ -91,23 +91,25 @@ const examCtrl = {
             const { id } = req.params;
             const { answers } = req.body;
             const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
+            if (!exam) return res.status(400).json({ msg: "Exam is not exist" });
             let rightAnswers = 0;
             exam.listOfQuestion.forEach((answer, index) => {
                 if (answer.correctAnswer === answers[index].answer) {
                     rightAnswers++;
                 }
             });
-            const score = Math.round((rightAnswers / exam.listOfQuestion.length) * 10 * 100) / 100;
-
+            let score = Math.round((rightAnswers / exam.listOfQuestion.length) * 10 * 100) / 100;
+            if (exam.listOfQuestion.length == 0) score = 10;
             const item = req.user.history.find(
                 (item) => item.isSubmit == false && deepCompare(item.exam._id, exam._id)
             );
             if (item) {
                 item.score = score;
                 item.isSubmit = true;
+                item.answers = answers;
                 req.user.save();
             } else {
-                res.json({ msg: "This user has not started this exam!", score });
+                return res.json({ msg: "This user has not started this exam!" });
             }
 
             res.json({ msg: "Submit success!", score });
@@ -129,6 +131,7 @@ const examCtrl = {
                 startTime: Date.now(),
                 score: 0,
                 isSubmit: false,
+                answers: [],
             };
             req.user.history.push(historyItem);
             req.user.save();
