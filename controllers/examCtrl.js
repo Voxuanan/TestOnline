@@ -138,8 +138,6 @@ const examCtrl = {
     },
     startExam: async (req, res) => {
         try {
-            // req.user.history = [];
-            // req.user.save();
             const { id } = req.params;
             let exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
             if (!exam) return res.status(400).json({ msg: "Exam is not exist" });
@@ -234,6 +232,14 @@ const examCtrl = {
                     updateAt: historyDetail.exam.updateAt,
                 },
             });
+        } catch (error) {
+            return res.status(500).json({ msg: error.message });
+        }
+    },
+    popularExam: async (req, res) => {
+        try {
+            const exam = await Exams.find().sort({ count: -1 }).limit(10);
+            return res.json({ msg: "Popular exam!", exam });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }

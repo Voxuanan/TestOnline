@@ -22,5 +22,6 @@ router.get(
     examMdw.isFinished,
     examCtrl.historyDetailedExam
 );
+router.get("/exam/popularExam", examCtrl.popularExam);
 
 module.exports = router;
