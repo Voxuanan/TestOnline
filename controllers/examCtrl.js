@@ -105,9 +105,13 @@ const examCtrl = {
             const dateAllowed = moment(exam.createdAt)
                 .add(exam.time + 2, "m")
                 .toDate();
-            console.log(req.user);
             if (!moment(Date.now()).isBefore(dateAllowed))
                 return res.json({ msg: "The time is up!" });
+
+            const item = req.user.history.find(
+                (item) => item.isSubmit == false && item.exam._id.toString() == exam._id.toString()
+            );
+            if (item.isSubmit) return res.json({ msg: "You cant submit the exam twice" });
 
             let rightAnswers = 0;
             exam.listOfQuestion.forEach((answer, index) => {
@@ -118,9 +122,7 @@ const examCtrl = {
             });
             let score = Math.round((rightAnswers / exam.listOfQuestion.length) * 10 * 100) / 100;
             if (exam.listOfQuestion.length == 0) score = 10;
-            const item = req.user.history.find(
-                (item) => item.isSubmit == false && item.exam._id.toString() == exam._id.toString()
-            );
+
             if (item) {
                 item.score = score;
                 item.isSubmit = true;
