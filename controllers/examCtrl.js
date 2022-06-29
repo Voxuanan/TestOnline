@@ -1,5 +1,6 @@
 const Exams = require("../models/examModel");
 const Questions = require("../models/questionModel");
+var moment = require("moment");
 
 const examCtrl = {
     createExam: async (req, res) => {
@@ -100,6 +101,14 @@ const examCtrl = {
             const { answers } = req.body;
             const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
             if (!exam) return res.status(400).json({ msg: "Exam is not exist" });
+            // thời gian có thể submit bằng router được (cho thêm 2 phút sai số )
+            const dateAllowed = moment(exam.createdAt)
+                .add(exam.time + 2, "m")
+                .toDate();
+            console.log(req.user);
+            if (!moment(Date.now()).isBefore(dateAllowed))
+                return res.json({ msg: "The time is up!" });
+
             let rightAnswers = 0;
             exam.listOfQuestion.forEach((answer, index) => {
                 const foundAnswer = answers.find((item) => answer._id == item.questionId);
@@ -120,7 +129,6 @@ const examCtrl = {
             } else {
                 return res.json({ msg: "This user has not started this exam!" });
             }
-
             res.json({ msg: "Submit success!", score });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
@@ -128,8 +136,11 @@ const examCtrl = {
     },
     startExam: async (req, res) => {
         try {
+            // req.user.history = [];
+            // req.user.save();
             const { id } = req.params;
-            const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
+            let exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
+            if (!exam) return res.status(400).json({ msg: "Exam is not exist" });
             const isContain = req.user.history.some(
                 (item) => item.exam._id.toString() == exam._id.toString()
             );
@@ -143,8 +154,27 @@ const examCtrl = {
             };
             req.user.history.push(historyItem);
             req.user.save();
-            await Exams.findByIdAndUpdate({ _id: id }, { $inc: { count: 1 } });
-            res.json({ msg: "Start exam!" });
+            exam = await Exams.findByIdAndUpdate(
+                { _id: id },
+                { $inc: { count: 1 } },
+                { new: true }
+            );
+            res.json({ msg: "Start exam!", exam });
+            // tự động submit (cho thêm 3 phút sai số , điểm bằng 0)
+            setTimeout(() => {
+                const item = req.user.history.find(
+                    (item) =>
+                        item.isSubmit == false && item.exam._id.toString() == exam._id.toString()
+                );
+                if (item) {
+                    item.score = 0;
+                    item.isSubmit = true;
+                    item.answers = [];
+                    req.user.save();
+                } else {
+                    return res.json({ msg: "This user has not started this exam!" });
+                }
+            }, (exam.time + 3) * 60 * 1000);
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }
