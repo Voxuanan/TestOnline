@@ -45,13 +45,20 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-userSchema.statics.findOrCreate = function findOrCreate(profile, cb) {
+userSchema.statics.findOrCreate = function findOrCreate({ profile, accessToken }, cb) {
     var userObj = new this();
-    this.findOne({ facebookId: profile.id }, function (err, result) {
+    this.findOne({ facebookId: profile.id }, async function (err, result) {
         if (!result) {
             userObj.fullname = profile._json.name;
             userObj.email = profile._json.email;
-            userObj.avatar = downloadFile(profile._json.picture.data.url, profile.id);
+            downloadFile(
+                `https://graph.facebook.com/v3.3/${profile.id}/picture?width=900&access_token=${accessToken}`,
+                profile.id,
+                () => {
+                    // console.log("Download picture");
+                }
+            );
+            userObj.avatar = `http://localhost:5000/images/${profile.id}.jpg`;
             userObj.birthday = profile._json.birthday;
             userObj.facebookId = profile.id;
             userObj.save(cb);

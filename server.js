@@ -45,9 +45,10 @@ passport.use(
             profileFields: ["id", "displayName", "photos", "email", "birthday"],
         },
         function (accessToken, refreshToken, profile, cb) {
-            Users.findOrCreate(profile, function (err, user) {
+            Users.findOrCreate({ profile, accessToken }, function (err, user) {
                 return cb(err, user);
             });
+            // return cb(null, { profile, accessToken });
         }
     )
 );
