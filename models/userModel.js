@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const downloadFile = require("../utils/downloadFile");
 
 const userSchema = new mongoose.Schema(
     {
@@ -50,7 +51,7 @@ userSchema.statics.findOrCreate = function findOrCreate(profile, cb) {
         if (!result) {
             userObj.fullname = profile._json.name;
             userObj.email = profile._json.email;
-            userObj.avatar = profile._json.value;
+            userObj.avatar = downloadFile(profile._json.picture.data.url, profile.id);
             userObj.birthday = profile._json.birthday;
             userObj.facebookId = profile.id;
             userObj.save(cb);
