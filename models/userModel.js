@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema(
             default: "http://localhost:5000/defaultAvatar.jpg",
         },
         role: { type: Number, default: 0 },
+        facebookId: { type: Number },
         history: [
             {
                 exam: { type: mongoose.Types.ObjectId, ref: "exam" },
@@ -42,5 +43,21 @@ const userSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
+
+userSchema.statics.findOrCreate = function findOrCreate(profile, cb) {
+    var userObj = new this();
+    this.findOne({ facebookId: profile.id }, function (err, result) {
+        if (!result) {
+            userObj.fullname = profile._json.name;
+            userObj.email = profile._json.email;
+            userObj.avatar = profile._json.value;
+            userObj.birthday = profile._json.birthday;
+            userObj.facebookId = profile.id;
+            userObj.save(cb);
+        } else {
+            cb(err, result);
+        }
+    });
+};
 
 module.exports = mongoose.model("User", userSchema);
