@@ -22,53 +22,8 @@ const questionCtrl = {
     getQuesionsByExamId: async (req, res) => {
         try {
             const { id } = req.params;
-            let { isShuffle = false, questionCount = 0 } = req.query;
-            const { listOfLessions } = req.body;
-            const exam = await Exams.findOne({ _id: id }).populate(
-                "listOfQuestion",
-                "-correctAnswer"
-            );
-            if (!exam) return res.status(400).json({ msg: "Exam id not exist" });
-
-            if (listOfLessions.length != 0) {
-                const arrTemp = [];
-                exam.listOfQuestion.forEach((question) => {
-                    let isOk = false;
-                    if (question.lession) {
-                        listOfLessions.forEach((lession) => {
-                            isOk = isOk || question.lession.toString() == lession;
-                        });
-                    }
-                    if (isOk) arrTemp.push(question);
-                });
-                exam.listOfQuestion = arrTemp;
-            }
-            if (questionCount > exam.listOfQuestion.length)
-                questionCount = exam.listOfQuestion.length;
-            if (questionCount < 0) questionCount = 0;
-
-            if (isShuffle && questionCount != 0) {
-                return res.json({
-                    msg: "Get question by exam id success!",
-                    exam: {
-                        ...exam._doc,
-                        listOfQuestion: [...shuffle(exam.listOfQuestion)].slice(0, questionCount),
-                    },
-                });
-            } else if (isShuffle && questionCount == 0) {
-                return res.json({
-                    msg: "Get question by exam id success!",
-                    exam: { ...exam._doc, listOfQuestion: [...shuffle(exam.listOfQuestion)] },
-                });
-            } else if (questionCount != 0) {
-                return res.json({
-                    msg: "Get question by exam id success!",
-                    exam: {
-                        ...exam._doc,
-                        listOfQuestion: exam.listOfQuestion.slice(0, questionCount),
-                    },
-                });
-            } else res.json({ msg: "Get question by exam id success!", exam });
+            const exam = await Exams.findOne({ _id: id });
+            res.json({ msg: "Get question by exam id success!", exam });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }
@@ -78,6 +33,53 @@ const questionCtrl = {
             const { id } = req.params;
             const exam = await Exams.findOne({ _id: id }).populate("listOfQuestion");
             res.json({ msg: "Get question by exam id success!", exam });
+        } catch (error) {
+            return res.status(500).json({ msg: error.message });
+        }
+    },
+    getQuestionBySubjectAndGrade: async (req, res) => {
+        try {
+            let { isShuffle = false, questionCount = 0, subject = "Toán", grade = 12 } = req.query;
+            const { listOfLessions } = req.body;
+            const exams = await Exams.find({ subject, grade }).populate(
+                "listOfQuestion",
+                "-correctAnswer"
+            );
+            const arrTemp = [];
+            if (exams.length == 0) return res.status(400).json({ msg: "Exam id not exist" });
+            if (listOfLessions.length != 0) {
+                exams.forEach((exam) => {
+                    console.log(exam);
+                    exam.listOfQuestion.forEach((question) => {
+                        let isOk = false;
+                        if (question.lession) {
+                            listOfLessions.forEach((lession) => {
+                                isOk = isOk || question.lession.toString() == lession;
+                            });
+                        }
+                        if (isOk) arrTemp.push(question);
+                    });
+                });
+            }
+            if (questionCount > arrTemp.length) questionCount = arrTemp.length;
+            if (questionCount < 0) questionCount = 0;
+            if (isShuffle && questionCount != 0) {
+                return res.json({
+                    msg: "Get question by exam id success!",
+                    listOfQuestion: [...shuffle(arrTemp)].slice(0, questionCount),
+                });
+            } else if (isShuffle && questionCount == 0) {
+                return res.json({
+                    msg: "Get question by exam id success!",
+                    listOfQuestion: [...shuffle(arrTemp)],
+                });
+            } else if (questionCount != 0) {
+                return res.json({
+                    msg: "Get question by exam id success!",
+
+                    listOfQuestion: arrTemp.slice(0, questionCount),
+                });
+            } else res.json({ msg: "Get question by exam id success!", listOfQuestion: arrTemp });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }

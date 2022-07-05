@@ -16,5 +16,10 @@ router.put(
     userMdw.isAdmin,
     questionCtrl.updateQuestionById
 );
+router.post(
+    "/question/admin/getQuestionBySubjectAndGrade",
+    userMdw.isLogin,
+    questionCtrl.getQuestionBySubjectAndGrade
+);
 
 module.exports = router;
