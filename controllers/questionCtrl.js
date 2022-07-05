@@ -47,20 +47,20 @@ const questionCtrl = {
             );
             const arrTemp = [];
             if (exams.length == 0) return res.status(400).json({ msg: "Exam id not exist" });
-            if (listOfLessions.length != 0) {
-                exams.forEach((exam) => {
-                    console.log(exam);
-                    exam.listOfQuestion.forEach((question) => {
-                        let isOk = false;
-                        if (question.lession) {
-                            listOfLessions.forEach((lession) => {
-                                isOk = isOk || question.lession.toString() == lession;
-                            });
-                        }
-                        if (isOk) arrTemp.push(question);
-                    });
+            exams.forEach((exam) => {
+                exam.listOfQuestion.forEach((question) => {
+                    let isOk = false;
+                    if (listOfLessions.length == 0) {
+                        isOk = true;
+                    } else if (question.lession) {
+                        listOfLessions.forEach((lession) => {
+                            isOk = isOk || question.lession.toString() == lession;
+                        });
+                    }
+                    if (isOk) arrTemp.push(question);
                 });
-            }
+            });
+
             if (questionCount > arrTemp.length) questionCount = arrTemp.length;
             if (questionCount < 0) questionCount = 0;
             if (isShuffle && questionCount != 0) {

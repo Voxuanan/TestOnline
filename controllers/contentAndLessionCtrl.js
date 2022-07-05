@@ -28,12 +28,12 @@ const contentAndLessionCtrl = {
         try {
             const { id } = req.params;
             const { unit, grade, subject } = req.body;
-            const content = await Contents.findByIdAndUpdate(
+            const updateContent = await Contents.findByIdAndUpdate(
                 { _id: id },
                 { unit, grade, subject },
                 { new: true }
             ).populate("listOfLessions");
-            res.json({ msg: "Update content!", content });
+            res.json({ msg: "Update content!", updateContent });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }
@@ -41,8 +41,8 @@ const contentAndLessionCtrl = {
     deleteContent: async (req, res) => {
         try {
             const { id } = req.params;
-            const content = await Contents.findByIdAndRemove(id);
-            res.json({ msg: "Delete content!", content });
+            const deleteContent = await Contents.findByIdAndRemove(id);
+            res.json({ msg: "Delete content!", deleteContent });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }
@@ -79,14 +79,14 @@ const contentAndLessionCtrl = {
             const { id } = req.params;
             const { removeId } = req.body;
             const removeLession = await Lessions.findById({ _id: removeId });
-            const content = await Contents.findOneAndUpdate(
+            const newContent = await Contents.findOneAndUpdate(
                 { _id: id },
                 {
                     $pull: { listOfLessions: removeLession._id },
                 },
                 { new: true }
             );
-            res.json({ msg: "remove lession success!", content });
+            res.json({ msg: "remove lession success!", newContent });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }

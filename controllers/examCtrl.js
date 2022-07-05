@@ -187,12 +187,12 @@ const examCtrl = {
         try {
             const { id } = req.params;
             const { name, grade, subject, time } = req.body;
-            const exam = await Exams.findByIdAndUpdate(
+            const updateExam = await Exams.findByIdAndUpdate(
                 { _id: id },
                 { name, grade, subject, time },
                 { new: true }
             ).populate("listOfQuestion");
-            res.json({ msg: "Update exam!", exam });
+            res.json({ msg: "Update exam!", updateExam });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }
@@ -200,8 +200,8 @@ const examCtrl = {
     deleteExam: async (req, res) => {
         try {
             const { id } = req.params;
-            const exam = await Exams.findByIdAndRemove(id);
-            res.json({ msg: "Delete exam!", exam });
+            const removeExam = await Exams.findByIdAndRemove(id);
+            res.json({ msg: "Delete exam!", removeExam });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }

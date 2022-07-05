@@ -18,7 +18,6 @@ router.put(
 );
 router.post(
     "/question/admin/getQuestionBySubjectAndGrade",
-    userMdw.isLogin,
     questionCtrl.getQuestionBySubjectAndGrade
 );
 

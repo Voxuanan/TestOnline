@@ -1,0 +1,892 @@
+{
+	"info": {
+		"_postman_id": "6ebd00f9-0ab7-477e-a513-d7904c061463",
+		"name": "TestOnline",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "LoginWithFacebook",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/auth/facebook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"facebook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullname\": \"Võ Xuân An\",\r\n    \"email\": \"voxuanan03072001@gmail.com\",\r\n    \"mobile\": \"0967964426\",\r\n    \"grade\": 12,\r\n    \"birthday\": \"2022-07-03T04:22:01.485Z\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh_token",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTc4NTc3OSwiZXhwIjoxNjU1ODcyMTc5fQ.COAxTjLM8idW6_9h3r5xJ53wkTrOV6pqaiUV0GHcDco",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/user/refresh_token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"refresh_token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYWZmNTI4NGMxYzIyMmQwOGM0ZTIzNiIsImlhdCI6MTY1NTc3OTc5NywiZXhwIjoxNjU1NzgwNDU3fQ.q2kETSKruLEgr0mP4xCnu3v2EbiQ9Bcfbawg2VVWP4Y",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"voxuanan03072001@gmail.com\",\r\n    \"password\":\"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/user/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Question",
+			"item": [
+				{
+					"name": "[Admin] GetQuesionsByExamId (có đáp án)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYmQxODgxNmVmNmUwNWMyZGYyM2M0ZiIsImlhdCI6MTY1NjU2MTQyMCwiZXhwIjoxNjU2NjQ3ODIwfQ.2djo7XkLmL0SV2RDsbZcp6zHFt_7df2gXbRm0ezxWnk",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/question/admin/getQuesionsByExamId/62b4397bf590b472427fa140",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"question",
+								"admin",
+								"getQuesionsByExamId",
+								"62b4397bf590b472427fa140"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetQuesionsByExamId (không đáp án)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTc5NjYwOCwiZXhwIjoxNjU1ODgzMDA4fQ.lRM5teOLnvAmrIAJJuqBy49_aC_uMJKa1qhw80wd75U",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/question/getQuesionsByExamId/62c3a4ba8c7717b2883e651b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"question",
+								"getQuesionsByExamId",
+								"62c3a4ba8c7717b2883e651b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Admin] UpdateQuestionById",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTc4NTc3OSwiZXhwIjoxNjU1ODcyMTc5fQ.COAxTjLM8idW6_9h3r5xJ53wkTrOV6pqaiUV0GHcDco",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"answerA\": \"Đẹp trai thì mới có nhiều đứa yêu\",\r\n    \"answerB\": \"G-Dragon\",\r\n    \"answerC\": \"Sơn Tùng\",\r\n    \"answerD\": \"Võ Xuân An\",\r\n    \"correctAnswer\": \"answerD\",\r\n    \"question\": \"Ai đẹp trai nhất\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/question/admin/updateQuestionById/62b1506b1647362ad1d6cec5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"question",
+								"admin",
+								"updateQuestionById",
+								"62b1506b1647362ad1d6cec5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetQuestionBySubjectAndGrade",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"listOfLessions\":[\"62c3ac5b1975acb8506ac5cd\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/question/admin/getQuestionBySubjectAndGrade?isShuffle=true&questionCount=0&grade=12&subject=Toán",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"question",
+								"admin",
+								"getQuestionBySubjectAndGrade"
+							],
+							"query": [
+								{
+									"key": "isShuffle",
+									"value": "true"
+								},
+								{
+									"key": "questionCount",
+									"value": "0"
+								},
+								{
+									"key": "grade",
+									"value": "12"
+								},
+								{
+									"key": "subject",
+									"value": "Toán"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Exam",
+			"item": [
+				{
+					"name": "GetPaginationExams",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1MDI5NiwiZXhwIjoxNjU2MDM2Njk2fQ.uBNMYQd0HGA4qXC3M7x23s3GwS_8MVblHLQr8LiJOPg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/exam/getPaginationExams?page=1&pageSize=10&grade=12&subject=Toán&isTHPTQG=false",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"exam",
+								"getPaginationExams"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "grade",
+									"value": "12"
+								},
+								{
+									"key": "subject",
+									"value": "Toán"
+								},
+								{
+									"key": "isTHPTQG",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Admin] CreateExam",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYzNlNmNlNTU2MWJlNTg4NGMyZmYxYiIsImlhdCI6MTY1NzAwNTkwNywiZXhwIjoxNjU3MDkyMzA3fQ.UmNh537TQs06VOZEc40r1K74TdwWMh6ajgna5yi5Qwc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Toán cao cấp 2\",\r\n    \"grade\": \"12\",\r\n    \"subject\": \"Toán\",\r\n    \"time\": \"45\",\r\n    \"isTHPTQG\": true,\r\n    \"listOfQuestion\": [\r\n        {\r\n            \"question\": \"1+1=?\",\r\n            \"answerA\": \"1\",\r\n            \"answerB\": \"2\",\r\n            \"answerC\": \"3\",\r\n            \"answerD\": \"4\",\r\n            \"correctAnswer\": \"answerB\",\r\n            \"lession\": \"62c3ac5b1975acb8506ac5cd\"\r\n        },\r\n        {\r\n            \"question\": \"1+3=?\",\r\n            \"answerA\": \"1\",\r\n            \"answerB\": \"2\",\r\n            \"answerC\": \"3\",\r\n            \"answerD\": \"4\",\r\n            \"correctAnswer\": \"answerD\",\r\n            \"lession\": \"62c3ac5b1975acb8506ac5cd\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/exam/createExam",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"exam",
+								"createExam"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Admin] AddQuestion",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1MDI5NiwiZXhwIjoxNjU2MDM2Njk2fQ.uBNMYQd0HGA4qXC3M7x23s3GwS_8MVblHLQr8LiJOPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"answerA\": \"Đông\",\r\n    \"answerB\": \"Xuân\",\r\n    \"answerC\": \"Thu\",\r\n    \"answerD\": \"Hạ\",\r\n    \"correctAnswer\": \"answerB\",\r\n    \"question\": \"test lession\",\r\n    \"lession\": \"62b4358058ac16dc34b2ec40\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/exam/addQuestion/62b4397bf590b472427fa140",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"exam",
+								"addQuestion",
+								"62b4397bf590b472427fa140"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Admin] RemoveQuestion",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTc4NTc3OSwiZXhwIjoxNjU1ODcyMTc5fQ.COAxTjLM8idW6_9h3r5xJ53wkTrOV6pqaiUV0GHcDco",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"removeId\": \"62b17a6351f4349f1d71b560\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/exam/removeQuestion/62b17a6351f4349f1d71b55e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"exam",
+								"removeQuestion",
+								"62b17a6351f4349f1d71b55e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "StartExam",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYzNhNGE3OGM3NzE3YjI4ODNlNjUxOCIsImlhdCI6MTY1Njk4ODkwNCwiZXhwIjoxNjU3MDc1MzA0fQ.8MTPH-bKBZa7e-ZefwkZ3MVYCAC1NsHMph1bOJe-cww",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/exam/startExam/62c3a4ba8c7717b2883e651b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"exam",
+								"startExam",
+								"62c3a4ba8c7717b2883e651b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SubmitAnswer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYzM5ZmM2OTg1ZGQ4YTY3NTlhNDRkZiIsImlhdCI6MTY1Njk4NzU5MCwiZXhwIjoxNjU3MDczOTkwfQ.i5VcRZN-UVAIDg_5h7fO9OAv4RD4ofoDbs7c_fZTGgU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"answers\": [\r\n                {\r\n            \"questionId\": \"62b3df054ae3626e48ccf8a7\",\r\n            \"answer\": \"answerD\"\r\n        },\r\n        {\r\n            \"questionId\": \"62b3df054ae3626e48ccf8a6\",\r\n            \"answer\": \"answerB\"\r\n        }\r\n\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/exam/submitAnswer/62c3a4ba8c7717b2883e651b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"exam",
+								"submitAnswer",
+								"62c3a4ba8c7717b2883e651b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Admin] UpdateExam",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1MDI5NiwiZXhwIjoxNjU2MDM2Njk2fQ.uBNMYQd0HGA4qXC3M7x23s3GwS_8MVblHLQr8LiJOPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Toán cao cấp 2\",\r\n    \"grade\": \"10\",\r\n    \"subject\": \"Toán\",\r\n    \"time\":\"45\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/exam/updateExam/62b181c8a897aa117027d676",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"exam",
+								"updateExam",
+								"62b181c8a897aa117027d676"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Admin] DeleteExam",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1MDI5NiwiZXhwIjoxNjU2MDM2Njk2fQ.uBNMYQd0HGA4qXC3M7x23s3GwS_8MVblHLQr8LiJOPg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/exam/deleteExam/62b181c8a897aa117027d676",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"exam",
+								"deleteExam",
+								"62b181c8a897aa117027d676"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HistoryDetailedExam",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1NzU0NywiZXhwIjoxNjU2MDQzOTQ3fQ.Cwn7cnRVlc5LPm-zXO3Cy1ELRx-Paz_ttI1P9-P12aI",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/exam/historyDetailedExam/62b3df054ae3626e48ccf8a4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"exam",
+								"historyDetailedExam",
+								"62b3df054ae3626e48ccf8a4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PopularExam",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/exam/popularExam",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"exam",
+								"popularExam"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ContentAndLession",
+			"item": [
+				{
+					"name": "[Admin] CreateContent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1MDI5NiwiZXhwIjoxNjU2MDM2Njk2fQ.uBNMYQd0HGA4qXC3M7x23s3GwS_8MVblHLQr8LiJOPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"unit\":\"Phân số\",\r\n    \"grade\":12,\r\n    \"subject\": \"Toán\",\r\n    \"listOfLessions\": [\"Cộng trừ phân số\", \"Nhân chia phân số\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/contentAndLession/createContent",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"contentAndLession",
+								"createContent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Admin] UpdateContent",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1MDI5NiwiZXhwIjoxNjU2MDM2Njk2fQ.uBNMYQd0HGA4qXC3M7x23s3GwS_8MVblHLQr8LiJOPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"unit\":\"Phân số :)\",\r\n    \"grade\":12,\r\n    \"subject\": \"Toán\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/contentAndLession/updateContent/62b43343c54f0b17c56792ec",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"contentAndLession",
+								"updateContent",
+								"62b43343c54f0b17c56792ec"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Admin] DeleteContent",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1MDI5NiwiZXhwIjoxNjU2MDM2Njk2fQ.uBNMYQd0HGA4qXC3M7x23s3GwS_8MVblHLQr8LiJOPg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/contentAndLession/deleteContent/62b43343c54f0b17c56792ec",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"contentAndLession",
+								"deleteContent",
+								"62b43343c54f0b17c56792ec"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Admin] AddLession",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1MDI5NiwiZXhwIjoxNjU2MDM2Njk2fQ.uBNMYQd0HGA4qXC3M7x23s3GwS_8MVblHLQr8LiJOPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\":\"anh an dep trai qua\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/contentAndLession/addLession/62b4358058ac16dc34b2ec3d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"contentAndLession",
+								"addLession",
+								"62b4358058ac16dc34b2ec3d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[Admin] RemoveLession",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1MDI5NiwiZXhwIjoxNjU2MDM2Njk2fQ.uBNMYQd0HGA4qXC3M7x23s3GwS_8MVblHLQr8LiJOPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"removeId\": \"62b4358058ac16dc34b2ec3f\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/contentAndLession/removeLession/62b4358058ac16dc34b2ec3d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"contentAndLession",
+								"removeLession",
+								"62b4358058ac16dc34b2ec3d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetContentsAndLessions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjE0MGRiM2NlOGFmM2ViNDQxYjMxYyIsImlhdCI6MTY1NTk1MDI5NiwiZXhwIjoxNjU2MDM2Njk2fQ.uBNMYQd0HGA4qXC3M7x23s3GwS_8MVblHLQr8LiJOPg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/contentAndLession/getContentsAndLessions?subject=Toán&grade=12",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"contentAndLession",
+								"getContentsAndLessions"
+							],
+							"query": [
+								{
+									"key": "subject",
+									"value": "Toán"
+								},
+								{
+									"key": "grade",
+									"value": "12"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
