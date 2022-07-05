@@ -22,7 +22,7 @@ const examCtrl = {
                     { new: true }
                 );
             });
-            res.json({ name, grade, subject, listOfQuestion });
+            return res.json({ name, grade, subject, listOfQuestion });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }
@@ -101,8 +101,11 @@ const examCtrl = {
             const { answers } = req.body;
             const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
             if (!exam) return res.status(400).json({ msg: "Exam is not exist" });
+            const startTime = req.user.history.find(
+                (item) => item.exam._id.toString() === exam._id.toString()
+            ).startTime;
             // thời gian có thể submit bằng router được (cho thêm 2 phút sai số )
-            const dateAllowed = moment(exam.createdAt)
+            const dateAllowed = moment(startTime)
                 .add(exam.time + 2, "m")
                 .toDate();
             if (!moment(Date.now()).isBefore(dateAllowed))
@@ -112,14 +115,14 @@ const examCtrl = {
                 (item) => item.isSubmit == false && item.exam._id.toString() == exam._id.toString()
             );
             if (item.isSubmit) return res.json({ msg: "You cant submit the exam twice" });
-
             let rightAnswers = 0;
             exam.listOfQuestion.forEach((answer, index) => {
                 const foundAnswer = answers.find((item) => answer._id == item.questionId);
-                if (answer.correctAnswer === foundAnswer.answer) {
+                if (answer.correctAnswer === foundAnswer?.answer) {
                     rightAnswers++;
                 }
             });
+
             let score = Math.round((rightAnswers / exam.listOfQuestion.length) * 10 * 100) / 100;
             if (exam.listOfQuestion.length == 0) score = 10;
 
@@ -142,9 +145,10 @@ const examCtrl = {
             let exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
             if (!exam) return res.status(400).json({ msg: "Exam is not exist" });
             const isContain = req.user.history.some(
-                (item) => item.exam._id.toString() == exam._id.toString()
+                (item) => item.exam?._id.toString() == exam._id.toString()
             );
             if (isContain) return res.json({ msg: "This user already took this exam!" });
+
             const historyItem = {
                 exam: exam._id,
                 startTime: Date.now(),
