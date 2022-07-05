@@ -109,7 +109,7 @@ const examCtrl = {
                 .add(exam.time + 2, "m")
                 .toDate();
             if (!moment(Date.now()).isBefore(dateAllowed))
-                return res.json({ msg: "The time is up!" });
+                return res.status(400).json({ msg: "The time is up!" });
 
             const item = req.user.history.find(
                 (item) => item.isSubmit == false && item.exam._id.toString() == exam._id.toString()
