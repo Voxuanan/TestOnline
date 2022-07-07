@@ -98,7 +98,7 @@ const examCtrl = {
     submitAnswer: async (req, res) => {
         try {
             const { id } = req.params;
-            const { answers } = req.body;
+            let { answers } = req.body;
             if (id != null && id != "null") {
                 const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
                 if (!exam) return res.status(400).json({ msg: "Exam is not exist" });
@@ -121,11 +121,14 @@ const examCtrl = {
                 if (item.isSubmit)
                     return res.status(400).json({ msg: "You cant submit the exam twice" });
                 let rightAnswers = 0;
+                let answersAndQuestions = [];
                 exam.listOfQuestion.forEach((answer, index) => {
                     const foundAnswer = answers.find((item) => answer._id == item.questionId);
                     if (answer.correctAnswer === foundAnswer?.answer) {
                         rightAnswers++;
                     }
+                    if (foundAnswer) answersAndQuestions.push({ ...answer._doc, ...foundAnswer });
+                    else answersAndQuestions.push({ ...answer._doc, answer: null });
                 });
                 let score =
                     Math.round((rightAnswers / exam.listOfQuestion.length) * 10 * 100) / 100;
@@ -133,18 +136,24 @@ const examCtrl = {
                 if (item) {
                     item.score = score;
                     item.isSubmit = true;
-                    item.answers = answers;
+                    item.answers = answersAndQuestions.map((answer) => {
+                        return {
+                            questionId: answer._id,
+                            answer: answer.answer,
+                        };
+                    });
                     req.user.save();
                 }
-                return res.json({ msg: "Submit success!", score });
+                return res.json({ msg: "Submit success!", score, answers: answersAndQuestions });
             } else {
                 let rightAnswers = 0;
-                for (const answer of answers) {
+                for (let i in answers) {
+                    let answer = answers[i];
                     const question = await Questions.findOne({ _id: answer.questionId });
                     answer.correctAnswer = null;
                     if (question && question?.correctAnswer == answer.answer) {
                         rightAnswers++;
-                        answer.correctAnswer = question.correctAnswer;
+                        answers[i] = { ...question._doc, ...answer };
                     }
                 }
                 let score = Math.round((rightAnswers / answers.length) * 10 * 100) / 100;
