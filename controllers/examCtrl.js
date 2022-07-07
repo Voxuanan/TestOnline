@@ -99,42 +99,58 @@ const examCtrl = {
         try {
             const { id } = req.params;
             const { answers } = req.body;
-            const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
-            if (!exam) return res.status(400).json({ msg: "Exam is not exist" });
-            const startTime = req.user.history.find(
-                (item) => item.exam._id.toString() === exam._id.toString()
-            ).startTime;
-            // thời gian có thể submit bằng router được (cho thêm 2 phút sai số )
-            const dateAllowed = moment(startTime)
-                .add(exam.time + 2, "m")
-                .toDate();
-            if (!moment(Date.now()).isBefore(dateAllowed))
-                return res.status(400).json({ msg: "The time is up!" });
-
-            const item = req.user.history.find(
-                (item) => item.isSubmit == false && item.exam._id.toString() == exam._id.toString()
-            );
-            if (item.isSubmit) return res.json({ msg: "You cant submit the exam twice" });
-            let rightAnswers = 0;
-            exam.listOfQuestion.forEach((answer, index) => {
-                const foundAnswer = answers.find((item) => answer._id == item.questionId);
-                if (answer.correctAnswer === foundAnswer?.answer) {
-                    rightAnswers++;
+            if (id != null && id != "null") {
+                const exam = await Exams.findById({ _id: id }).populate("listOfQuestion");
+                if (!exam) return res.status(400).json({ msg: "Exam is not exist" });
+                const startTime = req.user.history.find(
+                    (item) => item.exam._id.toString() === exam._id.toString()
+                ).startTime;
+                // thời gian có thể submit bằng router được (cho thêm 2 phút sai số )
+                const dateAllowed = moment(startTime)
+                    .add(exam.time + 2, "m")
+                    .toDate();
+                if (!moment(Date.now()).isBefore(dateAllowed))
+                    return res.status(400).json({ msg: "The time is up!" });
+                const item = req.user.history.find(
+                    (item) =>
+                        item.isSubmit == false && item.exam._id.toString() == exam._id.toString()
+                );
+                if (!item) {
+                    return res.status(400).json({ msg: "This user has not started this exam!" });
                 }
-            });
-
-            let score = Math.round((rightAnswers / exam.listOfQuestion.length) * 10 * 100) / 100;
-            if (exam.listOfQuestion.length == 0) score = 10;
-
-            if (item) {
-                item.score = score;
-                item.isSubmit = true;
-                item.answers = answers;
-                req.user.save();
+                if (item.isSubmit)
+                    return res.status(400).json({ msg: "You cant submit the exam twice" });
+                let rightAnswers = 0;
+                exam.listOfQuestion.forEach((answer, index) => {
+                    const foundAnswer = answers.find((item) => answer._id == item.questionId);
+                    if (answer.correctAnswer === foundAnswer?.answer) {
+                        rightAnswers++;
+                    }
+                });
+                let score =
+                    Math.round((rightAnswers / exam.listOfQuestion.length) * 10 * 100) / 100;
+                if (exam.listOfQuestion.length == 0) score = 10;
+                if (item) {
+                    item.score = score;
+                    item.isSubmit = true;
+                    item.answers = answers;
+                    req.user.save();
+                }
+                return res.json({ msg: "Submit success!", score });
             } else {
-                return res.json({ msg: "This user has not started this exam!" });
+                let rightAnswers = 0;
+                for (const answer of answers) {
+                    const question = await Questions.findOne({ _id: answer.questionId });
+                    answer.correctAnswer = null;
+                    if (question && question?.correctAnswer == answer.answer) {
+                        rightAnswers++;
+                        answer.correctAnswer = question.correctAnswer;
+                    }
+                }
+                let score = Math.round((rightAnswers / answers.length) * 10 * 100) / 100;
+                if (answers.length == 0) score = 10;
+                return res.json({ msg: "Submit success!", score, answers });
             }
-            res.json({ msg: "Submit success!", score });
         } catch (error) {
             return res.status(500).json({ msg: error.message });
         }
@@ -147,7 +163,8 @@ const examCtrl = {
             const isContain = req.user.history.some(
                 (item) => item.exam?._id.toString() == exam._id.toString()
             );
-            if (isContain) return res.json({ msg: "This user already took this exam!" });
+            if (isContain)
+                return res.status(400).json({ msg: "This user already took this exam!" });
 
             const historyItem = {
                 exam: exam._id,
@@ -175,8 +192,6 @@ const examCtrl = {
                     item.isSubmit = true;
                     item.answers = [];
                     req.user.save();
-                } else {
-                    return res.json({ msg: "This user has not started this exam!" });
                 }
             }, (exam.time + 3) * 60 * 1000);
         } catch (error) {
@@ -209,14 +224,14 @@ const examCtrl = {
     historyDetailedExam: async (req, res) => {
         try {
             let historyDetail = req.user.history.find(
-                (item) => item.isSubmit == true && item.exam._id.toString(),
-                req.exam._id.toString()
+                (item) =>
+                    item.isSubmit == true && item.exam._id.toString() == req.exam._id.toString()
             );
             let questionAndAnswers = historyDetail.exam.listOfQuestion.reduce((total, item) => {
                 const answer = historyDetail.answers.find(
                     (itemAnswer) => itemAnswer.questionId.toString() == item._id.toString()
                 );
-                let questionAndAnswer = { ...item._doc, userAnswer: answer.answer };
+                let questionAndAnswer = { ...item._doc, userAnswer: answer?.answer || null };
 
                 return [...total, questionAndAnswer];
             }, []);
